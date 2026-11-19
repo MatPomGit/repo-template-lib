@@ -78,3 +78,15 @@ Dodatkowo `contracts/api.json` z pustą listą `public_entrypoints` jest poprawn
 Z `Use this template` utworzyć `lib-example`, zachować w metadanych Mateusza Pomianka, opcjonalnie dopisać rzeczywistego współautora, wybrać **jeden** profil (np. Python), wygenerować pakiet z minimalnym publicznym API i kontraktem, wykonać clean install oraz smoke test odbiorcy. Na GitHub-hosted runner publicznego repozytorium uruchomić CI, następnie sprawdzić, że błędne API, wersja, licencja, brak testu lub checksum zablokują release. Przed publikacją wykonać wymagane review. Nie potrzeba danych uczestników ani urządzeń, jeśli profil tego nie wymaga.
 
 **Zakres niniejszego PR:** zapis audytu i rekomendacji, korekta autorstwa w szablonie, dopuszczenie GitHub-hosted runners i aktualizacja powiązanych dokumentów. **Nie wykonuje:** CI, testów pakietów, skanerów, aktualizacji rulesetów, publikacji ani wdrożenia całego backlogu. Checkboxy celowo pozostają otwarte.
+
+## Aktualizacja po naprawie w PR #1 (2026-11-19)
+
+Po sporządzeniu audytu wdrożono część kontroli, które wcześniej nie istniały. Zachowano oryginalne ustalenia jako opis stanu początkowego.
+
+- **LIB-01 (częściowo):** dodano `.github/workflows/ci.yml` dla `pull_request` i `push` na `main`, z GitHub-hosted `ubuntu-latest`, `contents: read`, bez sekretów i publikacji. Wymagany status check i wymuszanie review w ruleset `main` nadal wymagają osobnej decyzji administracyjnej.
+- **LIB-02 (częściowo):** walidator sprawdza typy obiektów JSON, `schema_version`, spójność nazw i wersji kontraktu, `public_entrypoints` oraz podstawowe pola manifestu. Nie dowodzi, że deklarowane symbole faktycznie istnieją w zbudowanej bibliotece.
+- **LIB-03 i LIB-04 (częściowo):** bramka `release` weryfikuje lokalny plik artefaktu oraz jego SHA-256, istniejący raport i podstawowe deklaracje licencji. Sama nie potwierdza CI provenance, zgodności SHA z HEAD ani praw do kodu i zależności; skaner sekretów pozostaje do wdrożenia.
+- **LIB-05, LIB-12 (częściowo):** porównywane są podstawowe pola `PROJECT_STATE.yaml` z manifestem i sprawdzana semantyka numerów SemVer. Parser stanu dotyczy jedynie top-level mapping w uproszczonym formacie, nie jest pełnym walidatorem YAML.
+- **LIB-10:** poprawiono `docs/privacy.md`, aby nie sugerować istnienia pól, których manifest nie definiuje.
+
+Dodano 11 lokalnych testów `unittest` z przypadkami negatywnymi. Kontrola scaffold oraz wszystkie 11 testów przeszły w izolowanym środowisku lokalnym przy użyciu równoważnego szkieletu metadanych. Ostateczny stan CI dla danego SHA należy ustalić z GitHub Actions. Brama publikacji pozostaje zamknięta dla czystego szablonu; nie wykonano pełnego testu budowy ani instalacji paczki.
