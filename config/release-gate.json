@@ -10,5 +10,6 @@
   "compatibility_documented": false,
   "consumer_contracts_verified": false,
   "publisher_approved": false,
-  "release_artifact_sha256": null
+  "release_artifact_sha256": null,
+  "release_artifact_path": null
 }
