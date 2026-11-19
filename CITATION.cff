@@ -1,9 +1,10 @@
 cff-version: 1.2.0
-message: "Cite the specific version and software release used. This is an unconfigured template."
+message: "Cytuj konkretną wersję biblioteki; współautorów dodawaj po potwierdzeniu wkładu."
 title: "REPLACE_LIB_TITLE"
 type: software
 authors:
-  - family-names: "REPLACE_FAMILY"
-    given-names: "REPLACE_GIVEN"
+  - family-names: "Pomianek"
+    given-names: "Mateusz"
+    orcid: "https://orcid.org/0000-0001-7769-8919"
 version: "0.1.0"
 # Add DOI/date-released ONLY when a real archived version exists.
