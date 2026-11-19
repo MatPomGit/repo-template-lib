@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "template_version": "1.0.0",
+  "type": "lib",
+  "component_id": "REPLACE_LIB_ID",
+  "display_name": "REPLACE_LIB_TITLE",
+  "version": "0.1.0",
+  "release_status": "scaffold",
+  "owner": "REPLACE_OWNER",
+  "license_spdx": "UNDECIDED",
+  "language": "REPLACE_LANGUAGE",
+  "distribution_kind": "unselected",
+  "package_identifier": "REPLACE_PACKAGE_ID",
+  "source_paths": [
+    "src"
+  ],
+  "api_contract": "contracts/api.json",
+  "dependencies": [],
+  "peer_dependencies": [],
+  "consumers": [],
+  "supported_platforms": [],
+  "compatibility": [],
+  "repository_url": "REPLACE_REPOSITORY_URL",
+  "documentation_url": "REPLACE_DOCS_URL",
+  "published_package_url": null,
+  "dependency_lockfiles": []
+}

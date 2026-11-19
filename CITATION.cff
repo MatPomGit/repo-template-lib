@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Cite the specific version and software release used. This is an unconfigured template."
+title: "REPLACE_LIB_TITLE"
+type: software
+authors:
+  - family-names: "REPLACE_FAMILY"
+    given-names: "REPLACE_GIVEN"
+version: "0.1.0"
+# Add DOI/date-released ONLY when a real archived version exists.

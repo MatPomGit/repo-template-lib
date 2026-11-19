@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "replace-package-name"
+version = "0.1.0"
+description = "Replace: this file is an example, not a publishable package"
+requires-python = ">=3.11"
+# Add dependencies and license only after verification.

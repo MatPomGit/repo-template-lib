@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tests_executed": false,
+  "test_report_path": null,
+  "tested_commit_sha": null,
+  "license_reviewed": false,
+  "dependency_audit_passed": false,
+  "clean_install_verified": false,
+  "public_api_verified": false,
+  "compatibility_documented": false,
+  "consumer_contracts_verified": false,
+  "publisher_approved": false,
+  "release_artifact_sha256": null
+}

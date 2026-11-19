@@ -1,0 +1,15 @@
+site_name: "REPLACE_LIB_TITLE"
+docs_dir: docs
+site_url: null
+nav:
+  - Start: index.md
+  - Instalacja: installation.md
+  - Kontrakty: contracts.md
+  - Zgodność: compatibility.md
+  - Zależności: consumers.md
+  - Łańcuch dostaw: dependencies.md
+  - Testowanie: testing.md
+  - Prywatność: privacy.md
+  - Wydania: releases.md
+  - Pages: pages.md
+  - ADR: adr/0001-contract.md

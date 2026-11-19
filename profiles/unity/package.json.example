@@ -1,0 +1,10 @@
+{
+  "name": "com.replace-owner.replace-lib",
+  "version": "0.1.0",
+  "displayName": "Replace Unity Library",
+  "description": "UPM package manifest example, not yet functional",
+  "unity": "6000.0",
+  "keywords": [
+    "research"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@replace-owner/replace-lib",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Template example; no working JavaScript entrypoint supplied",
+  "type": "module"
+}
