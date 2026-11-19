@@ -25,4 +25,4 @@ Zacznij od [TEMPLATE_SETUP.md](TEMPLATE_SETUP.md). GitHub Packages jest opcjonal
 
 ## Audyt i kontrole jakości
 
-Zobacz [audyt szablonu z 2026-11-19](reviews/2026-11-19-template-audit.md) i plan działań P0–P2. Publiczne repozytoria mogą korzystać z GitHub-hosted runners do bezpiecznego, izolowanego CI; sam szablon nie zawiera jeszcze workflow.
+Zobacz [audyt szablonu z 2026-11-19](reviews/2026-11-19-template-audit.md) i plan działań P0–P2. Publiczne repozytoria mogą korzystać z GitHub-hosted runners. Szablon zawiera minimalny [workflow Scaffold CI](.github/workflows/ci.yml) z walidacją metadanych i testami regresyjnymi; nie buduje ani nie publikuje pakietów.
