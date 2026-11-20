@@ -69,81 +69,7 @@ class MainInspector(HTMLParser):
 THEME_INLINE = re.compile(
     r'^\s*var\s+base_url\s*=\s*"(?:/|\.{1,2}(?:/\.\.)*)"\s*,\s*'
     r'shortcuts\s*=\s*\{\s*"help":\s*191,\s*"next":\s*78,\s*'
-    r'"previous":\s*80,\s*"search":\s*83\s*\}\s*;\s*
-    root = Path(root).resolve()
-    try:
-        policy = json.loads((root / "config/pages-policy.json").read_text(encoding="utf-8"))
-        approved = policy["public_files"]
-        if not isinstance(approved, list) or "index.md" not in approved:
-            return ["RENDER POLICY: missing index"]
-    except (OSError, UnicodeError, ValueError, TypeError, KeyError):
-        return ["RENDER POLICY: unavailable"]
-    site = root / "site"
-    if not site.is_dir() or site.is_symlink():
-        return ["RENDER SITE: missing or unsafe"]
-
-    errors: list[str] = []
-    approved_html: set[str] = set()
-    for path in approved:
-        if not isinstance(path, str) or Path(path).is_absolute() or ".." in Path(path).parts:
-            errors.append("RENDER POLICY: unsafe path")
-            continue
-        src = Path(path)
-        if src.suffix.lower() == ".md":
-            relative = Path("index.html") if path == "index.md" else src.with_suffix("") / "index.html"
-            approved_html.add(relative.as_posix())
-        else:
-            relative = src
-        file = site / relative
-        if file.is_symlink() or not file.is_file():
-            errors.append("RENDER MISSING: " + relative.as_posix())
-            continue
-        try:
-            if not file.resolve(strict=True).is_relative_to(site) or file.stat().st_size > 2_000_000:
-                errors.append("RENDER UNSAFE: " + relative.as_posix())
-                continue
-            if src.suffix.lower() == ".md":
-                inspector = MainInspector()
-                inspector.feed(file.read_text(encoding="utf-8"))
-                inspector.close()
-                if not inspector.found:
-                    errors.append("RENDER NO MAIN: " + relative.as_posix())
-                errors.extend("RENDER " + issue + " in " + relative.as_posix()
-                              for issue in inspector.issues)
-        except (OSError, UnicodeError, ValueError):
-            errors.append("RENDER UNREADABLE: " + relative.as_posix())
-
-    for file in site.rglob("*.html"):
-        path = file.relative_to(site).as_posix()
-        if file.is_symlink() or (path not in approved_html and path != "404.html"):
-            errors.append("RENDER UNAPPROVED HTML: " + path)
-    for file in site.rglob("*"):
-        if file.is_symlink():
-            errors.append("RENDER SYMLINK: " + file.relative_to(site).as_posix())
-        if file.is_file() and file.name.lower() in {
-            "agents.md", "agent_workflow.md", "contributing.md", "security.md"
-        }:
-            errors.append("RENDER INTERNAL DOCUMENT: " + file.relative_to(site).as_posix())
-    if strict:
-        errors.extend(_strict_assets(root, policy, approved))
-    return sorted(set(errors))
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=ROOT)
-    parser.add_argument("--strict", action="store_true")
-    args = parser.parse_args()
-    errors = check_rendered_pages(args.root, strict=args.strict)
-    for error in errors:
-        print("FAIL:", error)
-    print("lib-rendered-pages:", "FAIL" if errors else "PASS")
-    return 1 if errors else 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-
+    r'"previous":\s*80,\s*"search":\s*83\s*\}\s*;\s*$'
 )
 GENERATED = {"sitemap.xml", "sitemap.xml.gz", "search/search_index.json"}
 SENSITIVE = {"docs", "profiles", "contracts", "config", "research", "data",
@@ -336,14 +262,17 @@ def check_rendered_pages(root: Path = ROOT, *, strict: bool = False) -> list[str
             "agents.md", "agent_workflow.md", "contributing.md", "security.md"
         }:
             errors.append("RENDER INTERNAL DOCUMENT: " + file.relative_to(site).as_posix())
+    if strict:
+        errors.extend(_strict_assets(root, policy, approved))
     return sorted(set(errors))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--strict", action="store_true")
     args = parser.parse_args()
-    errors = check_rendered_pages(args.root)
+    errors = check_rendered_pages(args.root, strict=args.strict)
     for error in errors:
         print("FAIL:", error)
     print("lib-rendered-pages:", "FAIL" if errors else "PASS")
