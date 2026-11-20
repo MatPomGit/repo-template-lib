@@ -1,12 +1,8 @@
-# Dokumentacja biblioteki
+# Dokumentacja wewnętrzna biblioteki
 
-To dokumentacja techniczna komponentu, nie opis niezarejestrowanego badania.
-Nie prezentuj stanu `scaffold` jako rozwiązania gotowego do badań.
+To dokumentacja inżynierska, **nie** źródło publicznych GitHub Pages. Strona używa oddzielnego `pages/`.
 
-- [Instalacja](installation.md)
-- [Kontrakty](contracts.md)
-- [Kompatybilność](compatibility.md)
-- [Zależności i odbiorcy](consumers.md)
-- [Ochrona danych](privacy.md)
-- [Wydania](releases.md)
-- [GitHub Pages](pages.md)
+- [Architektura](architecture/README.md), [moduły](architecture/components.md), [dystrybucja](architecture/distribution.md).
+- [Kontrakty](contracts.md), [kompatybilność](compatibility.md), [odbiorcy](consumers.md), [zależności](dependencies.md).
+- [Bezpieczeństwo](security/threat-model.md), [supply-chain](security/supply-chain.md), [incydenty](security/incident-response.md).
+- [ADR](adr/README.md), [runbook](operations/runbook.md), [limity dokumentacji](documentation.md), [Pages](pages.md).

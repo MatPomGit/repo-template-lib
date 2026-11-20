@@ -10,3 +10,10 @@
 - **Audit live:** odczyt aktualnego HEAD i porównanie z przypiętym SHA. Zmiany via PR, bez cichego nadpisywania.
 
 Pełne kontrakty i macierz środowisk opisano w `docs/` i `config/component.json`.
+
+
+## Dokumentacja rozwijanej biblioteki
+
+Po powstaniu kodu opisz **realne** moduły, publiczne API, wersje ABI, granice I/O i adaptery w [components](docs/architecture/components.md), [data-flow](docs/architecture/data-flow.md) i [distribution](docs/architecture/distribution.md). [ADR](docs/adr/README.md) zapisują uzasadnienia decyzji, a [model zagrożeń](docs/security/threat-model.md) rzeczywiste ryzyka i dowody ich kontroli.
+
+Publikacja dokumentacji jako GitHub Pages korzysta **wyłącznie** z `pages/`, nigdy z `docs/` ([polityka](docs/pages.md)). Brak wdrożonej funkcji oznacza stan `NOT_IMPLEMENTED`, a nie domyślny `PASS`.

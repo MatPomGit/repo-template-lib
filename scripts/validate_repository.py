@@ -10,18 +10,39 @@ import re
 import sys
 from pathlib import Path
 
+# Direct execution and isolated test imports resolve helper modules alike.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from validate_documentation import check_documentation
+from validate_pages import check_pages
+
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = (
     "README.md", "AGENTS.md", "ARCHITECTURE.md", "PROJECT_STATE.yaml",
-    "SECURITY.md", "CONTRIBUTING.md", "LICENSE", "CITATION.cff",
+    "SECURITY.md", "CODE_OF_CONDUCT.md", "GOVERNANCE.md", "SUPPORT.md",
+    ".github/AGENT_WORKFLOW.md", "LICENSE", "CITATION.cff",
     "CHANGELOG.md", "TEMPLATE_SETUP.md", "mkdocs.yml", ".gitignore",
     ".gitattributes", ".github/ACTIONS_POLICY.md", ".github/workflows/ci.yml",
     ".github/PULL_REQUEST_TEMPLATE.md", ".github/ISSUE_TEMPLATE/work-item.md",
     "config/component.json", "config/release-gate.json", "contracts/api.json",
+    "config/documentation-policy.json", "config/pages-policy.json",
+    "pages/index.md", "scripts/validate_documentation.py",
+    "scripts/validate_pages.py", "scripts/validate_rendered_pages.py",
+    "tests/test_documentation_policy.py", "tests/test_pages_policy.py",
+    "tests/test_rendered_pages.py", "tests/test_agent_policy.py",
     "docs/index.md", "docs/contracts.md", "docs/compatibility.md",
     "docs/consumers.md", "docs/dependencies.md", "docs/testing.md",
     "docs/installation.md", "docs/privacy.md", "docs/releases.md",
-    "docs/pages.md", "docs/adr/0001-contract.md", "src/README.md",
+    "docs/pages.md", "docs/documentation.md",
+    "docs/architecture/README.md", "docs/architecture/components.md",
+    "docs/architecture/data-flow.md", "docs/architecture/distribution.md",
+    "docs/adr/README.md", "docs/adr/0001-contract.md",
+    "docs/adr/0002-security-boundaries.md", "docs/adr/0003-supply-chain.md",
+    "docs/security/threat-model.md", "docs/security/supply-chain.md",
+    "docs/security/incident-response.md", "docs/operations/runbook.md",
+    "profiles/python/AGENTS.md", "profiles/npm/AGENTS.md",
+    "profiles/maven/AGENTS.md", "profiles/nuget/AGENTS.md",
+    "profiles/oci/AGENTS.md", "profiles/unity/AGENTS.md",
+    "src/README.md",
     "examples/README.md", "tests/test_contract.py", "scripts/validate_repository.py",
 )
 # SemVer 2.0.0: disallow leading zeros in numeric identifiers.
@@ -110,6 +131,12 @@ def check(root=ROOT, phase="scaffold"):
     for rel in REQUIRED:
         if not (root / rel).is_file():
             errors.append("MISSING: " + rel)
+    if errors:
+        return errors
+    errors.extend(check_documentation(root))
+    errors.extend(check_pages(root))
+    if (root / "CONTRIBUTING.md").exists():
+        errors.append("CONTRIBUTING.md is not part of the library template")
     if errors:
         return errors
     component = _load_json(root, "config/component.json", errors)

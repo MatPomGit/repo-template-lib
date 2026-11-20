@@ -7,3 +7,5 @@ Szablon zawiera `.github/workflows/ci.yml` uruchamiający `python scripts/valida
 Dla niezaufanych PR stosuj `permissions: contents: read` i nie przekazuj sekretów. Nie używaj `pull_request_target` do wykonywania kodu z forków ani nie uruchamiaj takiego kodu na zaufanych stałych runnerach. Buildy wymagające prywatnych zależności lub dostępu do zasobów chronionych wykonuj oddzielnie po autoryzacji.
 
 Publikacja pakietu do rejestru, tworzenie Releases i deployment Pages wymagają osobnego zatwierdzenia. Plan wdrożenia CI i kontroli wydania jest w [audycie](../reviews/2026-11-19-template-audit.md).
+
+Walidatory `scripts/validate_documentation.py` i `scripts/validate_pages.py` działają offline w istniejącym jobie. Dodatkowo CI buduje MkDocs 1.6.1 bez wdrażania oraz sprawdza HTML za pomocą `scripts/validate_rendered_pages.py`. Środowisko nie wymaga tokenu publikacyjnego, a wdrożenie GitHub Pages i wydanie do registry pozostają osobno zatwierdzanymi działaniami. Wynik statycznego skanu nie zastępuje oceny wygenerowanego HTML i poufności.
