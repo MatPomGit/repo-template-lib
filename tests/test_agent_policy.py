@@ -28,7 +28,8 @@ class GovernanceTests(unittest.TestCase):
 
     def test_only_publicly_approved_pages(self):
         policy = json.loads((ROOT / "config/pages-policy.json").read_text())
-        self.assertEqual(["index.md"], policy["public_files"])
+        self.assertIn("index.md", policy["public_files"])
+        self.assertTrue(all((ROOT / "pages" / path).is_file() for path in policy["public_files"]))
         self.assertFalse((ROOT / "pages/AGENTS.md").exists())
 
 

@@ -10,9 +10,8 @@ import re
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-ALLOWED_EXT = {".md", ".html", ".css", ".js", ".svg", ".png", ".jpg",
-               ".jpeg", ".webp", ".avif", ".ico"}
-TEXT_EXT = {".md", ".html", ".css", ".js", ".svg"}
+ALLOWED_EXT = {".md", ".png", ".jpg", ".jpeg", ".webp", ".avif", ".ico"}
+TEXT_EXT = {".md"}
 UNSAFE_SEGMENTS = {"docs", "research", "manuscripts", "software",
                    "portfolio", "areas", "profiles", "contracts", "config",
                    "data", "results", "equipment",
@@ -35,6 +34,14 @@ BANNED = (
     re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----"),
     re.compile(r"(?<![A-Za-z0-9])gh[pousr]_[A-Za-z0-9_]{36,}(?![A-Za-z0-9_])"),
     re.compile(r"(?<![A-Za-z0-9])AKIA[0-9A-Z]{16}(?![0-9A-Z])"),
+)
+
+# MkDocs renders raw HTML from Markdown. Fail closed on active content.
+ACTIVE_SOURCE = (
+    re.compile(r"<\s*(?:[/!?]|[A-Za-z][A-Za-z0-9:-]*(?=[\s/>]))", re.I),
+    re.compile(r"\b(?:javascript|vbscript|data)\s*:", re.I),
+    re.compile(r"\bon[a-z]+\s*=", re.I),
+    re.compile(r"!\[[^\]]*\]\(\s*https?://", re.I),
 )
 
 
@@ -133,6 +140,8 @@ def check_pages(root: Path = ROOT) -> list[str]:
                 content = file.read_text(encoding="utf-8")
                 if any(regex.search(content) for regex in BANNED):
                     errors.append("PAGES EDITORIAL OR AGENT CONTENT: " + rel)
+                if any(regex.search(content) for regex in ACTIVE_SOURCE):
+                    errors.append("PAGES ACTIVE CONTENT: " + rel)
                 if re.search(r"\.\./|file://|https?://\S*(?:/AGENTS\.md|/\.github/|/research/|/docs/)",
                              content, re.I):
                     errors.append("PAGES INTERNAL REFERENCE: " + rel)

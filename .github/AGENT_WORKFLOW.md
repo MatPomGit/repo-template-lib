@@ -12,7 +12,7 @@ Pracuj na małych, testowanych zmianach, bez kopiowania kodu do `msc-*` i `app-*
 
 ## 3. Walidacja i niezależna recenzja
 
-Uruchom `python scripts/validate_repository.py --phase scaffold`, `python scripts/validate_documentation.py`, `python scripts/validate_pages.py`, `python -m unittest discover -s tests -v`. Dla konkretnego pakietu wykonaj również build, clean install, kontrolę licencji/zależności przechodnich, test API i kompatybilności na aktualnym SHA. Raportuj `PASS/FAIL/NOT_RUN/UNAVAILABLE/SKIPPED` bez przypisywania testom wyników, których nie uzyskano.
+Uruchom `python scripts/validate_repository.py --phase scaffold`, `python scripts/validate_documentation.py`, `python scripts/validate_pages.py`, `python -m unittest discover -s tests -v`, a dla witryny również `python -m mkdocs build --strict` (MkDocs 1.6.1) i `python scripts/validate_rendered_pages.py`. Dla konkretnego pakietu wykonaj również build, clean install, kontrolę licencji/zależności przechodnich, test API i kompatybilności na aktualnym SHA. Raportuj `PASS/FAIL/NOT_RUN/UNAVAILABLE/SKIPPED` bez przypisywania testom wyników, których nie uzyskano.
 
 Niezależny recenzent bada finalny diff i dowody; własna ocena nie jest niezależną recenzją. `COMMENTED/ACCEPT` nie zastępuje formalnego `APPROVED`.
 

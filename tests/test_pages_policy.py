@@ -24,8 +24,53 @@ class PagesPolicyTests(unittest.TestCase):
     def test_public_root_valid(self):
         self.assertEqual([], pages.check_pages(ROOT))
         self.assertFalse((ROOT / "CONTRIBUTING.md").exists())
-        self.assertEqual(["index.md"], json.loads(
+        self.assertIn("index.md", json.loads(
             (ROOT / "config/pages-policy.json").read_text())["public_files"])
+
+    def test_allowlisted_second_page_is_accepted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            (root / "pages/guide.md").write_text("# Guide\nSafe public text\n", encoding="utf-8")
+            cfg = root / "config/pages-policy.json"
+            obj = json.loads(cfg.read_text())
+            obj["public_files"].append("guide.md")
+            cfg.write_text(json.dumps(obj), encoding="utf-8")
+            cfg = root / "mkdocs.yml"
+            cfg.write_text(cfg.read_text() + "  - Guide: guide.md\n")
+            self.assertEqual([], pages.check_pages(root))
+
+    def test_raw_html_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            (root / "pages/index.md").write_text("# Public\n<script>alert(1)</script>\n")
+            self.assertIn("PAGES ACTIVE CONTENT: index.md", pages.check_pages(root))
+
+    def test_javascript_link_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            (root / "pages/index.md").write_text("[link](javascript:alert(1))")
+            self.assertIn("PAGES ACTIVE CONTENT: index.md", pages.check_pages(root))
+
+    def test_event_attribute_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            (root / "pages/index.md").write_text('onerror="alert(1)"')
+            self.assertIn("PAGES ACTIVE CONTENT: index.md", pages.check_pages(root))
+
+    def test_remote_image_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            (root / "pages/index.md").write_text("![pixel](https://example.org/track.png)")
+            self.assertIn("PAGES ACTIVE CONTENT: index.md", pages.check_pages(root))
+
+    def test_approved_script_asset_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            cfg = root / "config/pages-policy.json"
+            obj = json.loads(cfg.read_text())
+            obj["public_files"].append("scripts/custom.js")
+            cfg.write_text(json.dumps(obj))
+            self.assertIn("PAGES POLICY: unsafe public file allowlist", pages.check_pages(root))
 
     def test_docs_as_source_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
