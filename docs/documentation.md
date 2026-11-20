@@ -1,6 +1,6 @@
 # Standard dokumentacji i budżety znaków
 
-Źródła prawdy są rozdzielone: [README](../README.md) opisuje produkt, [ARCHITECTURE](../ARCHITECTURE.md) granice, [moduły](architecture/components.md) implementację, [contracts/api.json](../contracts/api.json) publiczny interfejs, [ADR](adr/README.md) uzasadnienia, [SECURITY](../SECURITY.md) ochronę i zgłoszenia, [GOVERNANCE](../GOVERNANCE.md) odpowiedzialność, a [Pages](pages.md) zasady treści publicznych.
+Źródła prawdy są rozdzielone: [README](../README.md) opisuje produkt, [ARCHITECTURE](../ARCHITECTURE.md) granice, [moduły](architecture/components.md) implementację, [contracts/api.json](../contracts/api.json) publiczny interfejs, [ADR](adr/README.md) uzasadnienia, [SECURITY](../SECURITY.md) ochronę i zgłoszenia, [GOVERNANCE](../GOVERNANCE.md) odpowiedzialność, [Pages](pages.md) zasady treści publicznych, a [wydania](releases.md) dowody i kanały dystrybucji.
 
 Limity w [config/documentation-policy.json](../config/documentation-policy.json) liczą **znaki Unicode** wraz z białymi znakami, nie bajty UTF-8.
 

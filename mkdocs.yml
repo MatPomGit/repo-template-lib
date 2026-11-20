@@ -2,5 +2,8 @@
 site_name: "Biblioteka"
 docs_dir: pages
 site_dir: site
+theme:
+  name: mkdocs
+  highlightjs: false
 nav:
   - Start: index.md
