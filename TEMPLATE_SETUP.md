@@ -19,3 +19,9 @@ Mateusz Pomianek pozostaje co najmniej jednym z autorów biblioteki wygenerowane
 ## Środowisko CI i publikacja
 
 Dla repozytoriów publicznych dopuszcza się GitHub-hosted runners (np. `ubuntu-latest`) do izolowanych testów podstawowych i PR. Lokalne runnery nie są wymagane. Zawsze kontroluj limity i koszty, ogranicz `GITHUB_TOKEN` do `contents: read`, nie udostępniaj sekretów niezaufanym gałęziom i nie uruchamiaj ich kodu w uprzywilejowanym środowisku. W prywatnych repozytoriach powstałych ze wzorca job `validate` jest domyślnie pomijany, aby nie uruchamiać płatnego GitHub-hosted runnera bez zgody; świadome uruchomienie CI wymaga osobnej konfiguracji i kontroli kosztów, dostępu i poufności. Wydanie pakietu oraz publikacja dokumentacji nie wynikają automatycznie z uruchomienia CI. Szczegóły brakujących kontroli: [audyt](reviews/2026-11-19-template-audit.md).
+
+## Standard E4.0: publiczne API i wersjonowane wydania
+
+Przygotuj stronę wyłącznie z zatwierdzonego `pages/` zgodnie z [polityką Pages](docs/pages.md). Opisuj tylko zaimplementowane i przetestowane symbole API, przykłady instalacji i kompatybilność. Kontroluj zasoby źródłowe i końcowy `site/`, a przy repo prywatnym rzeczywistą widoczność Pages. Wykonaj `python scripts/validate_rendered_pages.py --strict` po `mkdocs build --strict`.
+
+Wydanie biblioteki wymaga [bramek R0–R4](docs/releases.md), wersji SemVer niezależnej od `template_version`, zamrożonego kontraktu, clean install z faktycznego pakietu i sprawdzenia odbiorców. Dla profili Python/npm/Maven/NuGet/Unity UPM/OCI stosuj tylko odpowiadający rzeczywistemu wdrożeniu kanał. Oddziel GitHub Release, registry i Pages. Nie dopisuj fikcyjnych atestacji ani raportów. Brak egzekwowanego CI/review pozostawia `HOLD`; bez dodatkowych kosztów i automatycznego deploymentu.
