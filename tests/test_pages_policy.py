@@ -158,5 +158,48 @@ class PagesPolicyTests(unittest.TestCase):
                           pages.check_pages(root))
 
 
+    def test_unreviewed_image_hash_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            pic = root / "pages/figure.png"
+            pic.write_bytes(b"\x89PNG\r\n\x1a\nsynthetic")
+            policy = root / "config/pages-policy.json"
+            data = json.loads(policy.read_text(encoding="utf-8"))
+            data["public_files"].append("figure.png")
+            policy.write_text(json.dumps(data), encoding="utf-8")
+            self.assertIn("PAGES IMAGE HASH UNAPPROVED: figure.png",
+                          pages.check_pages(root))
+
+    def test_exif_metadata_rejected_despite_approved_hash(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            pic = root / "pages/figure.png"
+            pic.write_bytes(b"\x89PNG\r\n\x1a\n" + b"eXIf" + b"synthetic")
+            policy = root / "config/pages-policy.json"
+            data = json.loads(policy.read_text(encoding="utf-8"))
+            data["public_files"].append("figure.png")
+            data["approved_image_sha256"]["figure.png"] = hashlib.sha256(
+                pic.read_bytes()).hexdigest()
+            policy.write_text(json.dumps(data), encoding="utf-8")
+            self.assertIn("PAGES IMAGE METADATA: figure.png", pages.check_pages(root))
+
+    def test_highlightjs_cdn_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            conf = root / "mkdocs.yml"
+            conf.write_text(conf.read_text().replace("highlightjs: false", "highlightjs: true"),
+                            encoding="utf-8")
+            self.assertIn("PAGES CONFIG: approved offline theme required",
+                          pages.check_pages(root))
+
+    def test_direct_chatgpt_prompt_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixture(Path(tmp) / "lib")
+            (root / "pages/index.md").write_text(
+                "ChatGPT: zaktualizuj ten opis.", encoding="utf-8")
+            self.assertIn("PAGES EDITORIAL OR AGENT CONTENT: index.md",
+                          pages.check_pages(root))
+
 if __name__ == "__main__":
     unittest.main()
