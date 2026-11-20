@@ -30,5 +30,9 @@ jobs:
           python-version: '3.11'
       - name: Validate scaffold
         run: python scripts/validate_repository.py --phase scaffold
+      - name: Check documentation budgets
+        run: python scripts/validate_documentation.py
+      - name: Check isolated public Pages
+        run: python scripts/validate_pages.py
       - name: Run regression tests
         run: python -m unittest discover -s tests -v
